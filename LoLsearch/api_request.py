@@ -9,7 +9,7 @@ def get_request(url, keys):
 
 #PROGRAM
 
-key = 'RGAPI-3989dd96-5f18-464f-bf05-865ca78dd8ee'
+key = ''
 keys = {'api_key': key}
 url = 'https://na.api.pvp.net/'
 
