@@ -89,10 +89,6 @@ async def hello():
 	return await my_bot.say('Hello World!')
 
 @my_bot.command()
-async def matt():
-    return await my_bot.say("He is the greatest.")
-
-@my_bot.command()
 async def ranked(*, summoner_name: str):
 	await my_bot.say("retrieving data...")
 	output = get_ranks(summoner_name)
@@ -105,6 +101,18 @@ async def clear(ctx, number):
     async for x in my_bot.logs_from(ctx.message.channel, limit = number):
         mgs.append(x)
     await my_bot.delete_messages(mgs)
+
+@my_bot.command()
+async def matt():
+    return await my_bot.say("What a monkey.")
+
+@my_bot.command()
+async def joey():
+    return await my_bot.say("He did it.")
+
+@my_bot.command()
+async def felix():
+    return await my_bot.say("~meow")
 
 my_bot.run("MzE1OTI4MzU3NTA0MDI0NTc2.DAN2uQ.SLmnsOTQf2Bm760HS4DeQAybgF4")
 
