@@ -15,7 +15,7 @@ def get_ranks(orig_summoner_name):
 
 	output = '```'
 
-	key = 'RGAPI-3989dd96-5f18-464f-bf05-865ca78dd8ee'
+	
 	keys = {'api_key': key}
 	url = 'https://na.api.pvp.net/'
 
