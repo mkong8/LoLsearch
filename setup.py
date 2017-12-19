@@ -7,6 +7,9 @@ setup(
     include_package_data=True,
     install_requires=[
         'requests',
-        'discord'
+        'discord',
+        'pycodestyle',
+        'pydocstyle',
+        'pylint'
     ],
 )

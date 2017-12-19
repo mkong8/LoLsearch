@@ -1,3 +1,4 @@
+"""Deprecated."""
 import requests
 import time
 import discord
