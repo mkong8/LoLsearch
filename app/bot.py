@@ -1,7 +1,6 @@
 import discord
 from discord.ext.commands import Bot
 from config import TOKEN
-import riot
 
 
 my_bot = Bot(command_prefix="!")
