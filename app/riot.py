@@ -34,7 +34,8 @@ def get_rank(summoner_id):
     rank_info = requests.get(rank_endpoint).json()
     for rank_type in rank_info:
         if rank_type['queueType'] == 'RANKED_SOLO_5x5':
-            return rank_type['tier'], rank_type['rank']
+            return (rank_type['tier'], rank_type['rank'],
+                    rank_type['leaguePoints'])
 
 
 def get_history(ign):
@@ -62,12 +63,12 @@ def get_rank_output(ign):
     game_length = game_info['gameLength']
 
     for participant in game_info['participants']:
-        tier, rank = get_rank(participant['summonerId'])
+        tier, rank, LP = get_rank(participant['summonerId'])
         name = participant['summonerName']
         if participant['teamId'] == 100:
-            players['blue'][name] = (tier, rank)
+            players['blue'][name] = [tier, rank, LP]
         else:
-            players['red'][name] = (tier, rank)
+            players['red'][name] = [tier, rank, LP]
 
     # pp = pprint.PrettyPrinter()
     # pp.pprint(players)
@@ -81,9 +82,12 @@ def get_rank_output(ign):
             blank_buffer = ' '*line_length
             if player.lower() == ign.lower():
                 curr_player = '*'
-            output += '{}{}{}{} {}\n'.format(curr_player, player, blank_buffer,
+            output += '{}{}{}{} {}'.format(curr_player, player, blank_buffer,
                                            players[team][player][0],
                                            players[team][player][1])
+            blank_buffer = ' '*(16 - len(players[team][player][0])
+                                - len(players[team][player][1]))
+            output += '{}{} LP\n'.format(blank_buffer, players[team][player][2])
         output += '\n'
     minutes, seconds = divmod(game_length, 60)
     output += ' Game Time: %02d:%02d' % (minutes, seconds)
