@@ -2,6 +2,7 @@
 import requests
 from datetime import datetime, timedelta
 import pprint
+import discord
 
 import config
 from config import API_KEY, RIOT
