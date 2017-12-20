@@ -35,7 +35,6 @@ def get_rank(summoner_id):
             return rank_type['tier'], rank_type['rank']
 
 
-
 def get_rank_output(ign):
     game_info = get_game_info(ign)
 
@@ -62,7 +61,7 @@ def get_rank_output(ign):
         for player in players[team]:
             line_length = 20 - len(player)
             blank_buffer = ' '*line_length
-            output += '{}{}{} {}\n'.format(player, blank_buffer, 
+            output += '{}{}{} {}\n'.format(player, blank_buffer,
                                            players[team][player][0],
                                            players[team][player][1])
         output += '\n'
@@ -70,4 +69,3 @@ def get_rank_output(ign):
     output += 'Game Time: %02d:%02d' % (minutes, seconds)
     output += '```'
     return output
-
