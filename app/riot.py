@@ -1,5 +1,6 @@
 """Return json with game info."""
 import requests
+import json
 from datetime import datetime, timedelta
 import pprint
 import discord
@@ -8,19 +9,19 @@ import config
 from config import API_KEY, RIOT
 
 
-def get_summoner_id(ign):
+def get_summoner_info(ign):
     """Summoner id needed for spectator API."""
     searchname = ign.strip().replace(' ', '').lower()
     summoner_endpoint = '{}/lol/summoner/v3/summoners/by-name/' \
                         '{}?api_key={}'.format(RIOT, searchname, API_KEY)
     summoner_info = requests.get(summoner_endpoint).json()
     # print(info)
-    return summoner_info['id']
+    return summoner_info
 
 
 def get_game_info(ign):
     """In game info from spectator endpoint."""
-    summoner_id = get_summoner_id(ign)
+    summoner_id = get_summoner_info(ign)['id']
     spectator_endpoint = '{}/lol/spectator/v3/active-games/by-summoner/' \
                          '{}?api_key={}'.format(RIOT, summoner_id, API_KEY)
     game_info = requests.get(spectator_endpoint).json()
@@ -34,6 +35,21 @@ def get_rank(summoner_id):
     for rank_type in rank_info:
         if rank_type['queueType'] == 'RANKED_SOLO_5x5':
             return rank_type['tier'], rank_type['rank']
+
+
+def get_history(ign):
+    account_id = get_summoner_info(ign)['accountId']
+    history_endpoint = '{}/lol/match/v3/matchlists/by-account/' \
+                       '{}/recent?api_key={}'.format(RIOT, account_id, API_KEY)
+    history_info = requests.get(history_endpoint).json()
+    return history_info
+
+
+def get_match_info(match_id):
+    match_endpoint = '{}/lol/match/v3/matches/' \
+                       '{}?api_key={}'.format(RIOT, match_id, API_KEY)
+    match_info = requests.get(match_endpoint).json()
+    return match_info
 
 
 def get_rank_output(ign):
@@ -71,5 +87,21 @@ def get_rank_output(ign):
         output += '\n'
     minutes, seconds = divmod(game_length, 60)
     output += ' Game Time: %02d:%02d' % (minutes, seconds)
-    output += '```'
-    return output
+    return output + '```'
+
+
+def get_history_output(ign):
+    champion_index = json.loads(open('var/champions.json').read())['data']
+    matchlist = get_history(ign)['matches']
+    output = '```CHAMPION\n'
+    for match in matchlist:
+        line_length = 20
+        champion_id = int(match['champion'])
+        for champion in champion_index:
+            if int(champion_index[champion]['key']) == champion_id:
+                # print(champion_index[champion]['name'])
+                output += '{}\n'.format(champion)
+    print(output)
+    return output + '```'
+
+get_history_output('filetofish21')

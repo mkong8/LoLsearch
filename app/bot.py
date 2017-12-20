@@ -27,7 +27,7 @@ async def embed():
 
 
 @my_bot.command()
-async def ranks(*, summoner_name: str):
+async def rank(*, summoner_name: str):
     print("finding ranks...")
     await my_bot.say("finding ranks...")
     message = riot.get_rank_output(summoner_name)
