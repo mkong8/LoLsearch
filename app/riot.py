@@ -57,16 +57,19 @@ def get_rank_output(ign):
     # pp.pprint(players)
     output = '```'
     for team in players:
-        output += team.upper() + " TEAM\n"
-        output += '-'*32 + '\n'
+        output += " {} TEAM\n".format(team.upper())
+        output += ' ' + '-'*32 + '\n'
         for player in players[team]:
+            curr_player = ' '
             line_length = 20 - len(player)
             blank_buffer = ' '*line_length
-            output += '{}{}{} {}\n'.format(player, blank_buffer,
+            if player.lower() == ign.lower():
+                curr_player = '*'
+            output += '{}{}{}{} {}\n'.format(curr_player, player, blank_buffer,
                                            players[team][player][0],
                                            players[team][player][1])
         output += '\n'
     minutes, seconds = divmod(game_length, 60)
-    output += 'Game Time: %02d:%02d' % (minutes, seconds)
+    output += ' Game Time: %02d:%02d' % (minutes, seconds)
     output += '```'
     return output
