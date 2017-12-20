@@ -23,10 +23,11 @@ async def embed():
     return await my_bot.say(embed=embed)
 
 @my_bot.command()
-async def ranked(*, summoner_name: str):
+async def ranks(*, summoner_name: str):
+    print("retrieving data...")
     await my_bot.say("retrieving data...")
-    output = get_ranks(summoner_name)
-    return await my_bot.say(output)
+    message = riot.get_rank_output(summoner_name)
+    return await my_bot.say(message)
 
 @my_bot.command(pass_context = True)
 async def clear(ctx, number):
@@ -38,6 +39,8 @@ async def clear(ctx, number):
 
 @my_bot.command()
 async def shutdown():
-    my_bot.logout()
+    print("Shutting down...")
+    await my_bot.say("Shutting down...")
+    await my_bot.close()
 
 my_bot.run(TOKEN)

@@ -36,7 +36,7 @@ def get_rank(summoner_id):
 
 
 
-def get_output(ign):
+def get_rank_output(ign):
     game_info = get_game_info(ign)
 
     if 'status' in game_info:
@@ -61,7 +61,6 @@ def get_output(ign):
         output += '-'*32 + '\n'
         for player in players[team]:
             line_length = 20 - len(player)
-            print(line_length)
             blank_buffer = ' '*line_length
             output += '{}{}{} {}\n'.format(player, blank_buffer, 
                                            players[team][player][0],
@@ -71,6 +70,4 @@ def get_output(ign):
     output += 'Game Time: %02d:%02d' % (minutes, seconds)
     output += '```'
     return output
-
-print(get_output('chapanya'))
 
