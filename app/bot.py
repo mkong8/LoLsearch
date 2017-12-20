@@ -35,6 +35,15 @@ async def rank(*, summoner_name: str):
     return await my_bot.say(message)
 
 
+@my_bot.command()
+async def history(*, summoner_name: str):
+    print("finding history...")
+    await my_bot.say("finding history...")
+    message = riot.get_history_output(summoner_name)
+    print("found history.")
+    return await my_bot.say(message)
+
+
 @my_bot.command(pass_context=True)
 async def clear(ctx, number):
     mgs = []  # Empty list to put all the messages in the log

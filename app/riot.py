@@ -92,16 +92,37 @@ def get_rank_output(ign):
 
 def get_history_output(ign):
     champion_index = json.loads(open('var/champions.json').read())['data']
-    matchlist = get_history(ign)['matches']
-    output = '```CHAMPION\n'
+    matchlist = get_history(ign)['matches'][0:10]
+    output = '```CHAMPION  SCORE     CS      WIN/LOSS\n'
+    output += '-'*30 + '\n'
     for match in matchlist:
-        line_length = 20
+        line_length = 10
         champion_id = int(match['champion'])
         for champion in champion_index:
             if int(champion_index[champion]['key']) == champion_id:
                 # print(champion_index[champion]['name'])
-                output += '{}\n'.format(champion)
-    print(output)
+                output += champion
+                space_buffer = line_length - len(champion)
+                output += ' '*space_buffer
+        match_info = get_match_info(match['gameId'])
+        for participant in match_info['participants']:
+            if int(participant['championId']) == champion_id:
+                win = participant['stats']['win']
+                kills = participant['stats']['kills']
+                deaths = participant['stats']['deaths']
+                assists = participant['stats']['assists']
+                creepscore = participant['stats']['totalMinionsKilled'] \
+                             + participant['stats']['neutralMinionsKilled']
+                space_buffer = line_length - len(str(kills))\
+                                - len(str(deaths)) - len(str(assists)) - 2
+                output += "{}/{}/{}{}".format(kills,
+                                              deaths,
+                                              assists,
+                                              ' '*space_buffer)
+                space_buffer = line_length - len(str(creepscore))
+                output += "{}{}".format(creepscore, ' '*space_buffer)
+                if win:
+                    output += 'WIN\n'
+                else:
+                    output += 'LOSS\n'
     return output + '```'
-
-get_history_output('filetofish21')
