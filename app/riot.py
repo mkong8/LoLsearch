@@ -32,6 +32,8 @@ def get_rank(summoner_id):
     rank_endpoint = '{}/lol/league/v3/positions/by-summoner/' \
                     '{}?api_key={}'.format(RIOT, summoner_id, API_KEY)
     rank_info = requests.get(rank_endpoint).json()
+    if len(rank_info) == 0:
+        return ('UNRANKED', '', '')
     for rank_type in rank_info:
         if rank_type['queueType'] == 'RANKED_SOLO_5x5':
             return (rank_type['tier'], rank_type['rank'],
@@ -95,12 +97,13 @@ def get_rank_output(ign):
 
 
 def get_history_output(ign):
-    champion_index = json.loads(open('var/champions.json').read())['data']
+    champion_index = json.loads(open('var/champions.json',
+                                     encoding='utf8').read())['data']
     matchlist = get_history(ign)['matches'][0:10]
     output = '```CHAMPION  SCORE     CS      WIN/LOSS\n'
     output += '-'*30 + '\n'
     for match in matchlist:
-        line_length = 10
+        line_length = 14
         champion_id = int(match['champion'])
         for champion in champion_index:
             if int(champion_index[champion]['key']) == champion_id:
@@ -130,3 +133,4 @@ def get_history_output(ign):
                 else:
                     output += 'LOSS\n'
     return output + '```'
+get_rank(get_summoner_info('danbrown1337')['id'])
